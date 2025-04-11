@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class AddPost extends StatefulWidget {
   const AddPost({super.key});
@@ -16,10 +14,10 @@ class _AddPostState extends State<AddPost> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
+  
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
-
+  
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -28,25 +26,12 @@ class _AddPostState extends State<AddPost> {
       });
     }
   }
-
-  Future<String> _uploadImage(File image) async {
-    try {
-      final storageRef = FirebaseStorage.instance.ref();
-      final imageRef = storageRef.child(
-        'post_images/${DateTime.now().millisecondsSinceEpoch}.jpg',
-      );
-      await imageRef.putFile(image);
-      return await imageRef.getDownloadURL();
-    } catch (e) {
-      print('Error uploading image: $e'); // Log error
-      throw Exception('Error uploading image: $e');
-    }
-  }
-
-  void _submitPost() async {
-    if (_nameController.text.isEmpty ||
-        _locationController.text.isEmpty ||
-        _cityController.text.isEmpty ||
+  
+  void _submitPost() {
+    // Validate inputs
+    if (_nameController.text.isEmpty || 
+        _locationController.text.isEmpty || 
+        _cityController.text.isEmpty || 
         _selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -56,31 +41,18 @@ class _AddPostState extends State<AddPost> {
       );
       return;
     }
-
-    try {
-      final imageUrl = await _uploadImage(_selectedImage!); // Upload image
-      final postData = {
-        'name': _nameController.text,
-        'location': _locationController.text,
-        'city': _cityController.text,
-        'description': _descriptionController.text,
-        'imageUrl': imageUrl, // Save image URL
-        'timestamp': FieldValue.serverTimestamp(),
-      };
-
-      await FirebaseFirestore.instance
-          .collection('posts')
-          .add(postData); // Save to Firestore
-      Navigator.pop(context, postData);
-    } catch (e) {
-      print('Error saving post: $e'); // Log error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error saving post: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+    
+    // Create post data
+    final postData = {
+      'name': _nameController.text,
+      'location': _locationController.text,
+      'city': _cityController.text,
+      'description': _descriptionController.text,
+      'imagePath': _selectedImage!.path,
+    };
+    
+    // Return data to previous screen
+    Navigator.pop(context, postData);
   }
 
   @override
@@ -104,10 +76,13 @@ class _AddPostState extends State<AddPost> {
             children: [
               const Text(
                 'Create a New Post',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 20),
-
+              
               // Image Selection
               GestureDetector(
                 onTap: _pickImage,
@@ -119,37 +94,36 @@ class _AddPostState extends State<AddPost> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.grey),
                   ),
-                  child:
-                      _selectedImage != null
-                          ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(
-                              _selectedImage!,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                          : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.add_photo_alternate,
-                                size: 50,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'Tap to select an image',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                  child: _selectedImage != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(
+                            _selectedImage!,
+                            fit: BoxFit.cover,
                           ),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.add_photo_alternate,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Tap to select an image',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
               ),
               const SizedBox(height: 20),
-
+              
               // Name Field
               TextField(
                 controller: _nameController,
@@ -160,7 +134,7 @@ class _AddPostState extends State<AddPost> {
                 ),
               ),
               const SizedBox(height: 15),
-
+              
               // Location Field
               TextField(
                 controller: _locationController,
@@ -171,7 +145,7 @@ class _AddPostState extends State<AddPost> {
                 ),
               ),
               const SizedBox(height: 15),
-
+              
               // City Field
               TextField(
                 controller: _cityController,
@@ -182,7 +156,7 @@ class _AddPostState extends State<AddPost> {
                 ),
               ),
               const SizedBox(height: 15),
-
+              
               // Description Field
               TextField(
                 controller: _descriptionController,
@@ -194,7 +168,7 @@ class _AddPostState extends State<AddPost> {
                 ),
               ),
               const SizedBox(height: 30),
-
+              
               // Submit Button
               SizedBox(
                 width: double.infinity,
@@ -208,7 +182,10 @@ class _AddPostState extends State<AddPost> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Post', style: TextStyle(fontSize: 18)),
+                  child: const Text(
+                    'Post',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
             ],

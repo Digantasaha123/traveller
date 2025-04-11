@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'top_places.dart';
 import 'add_post.dart';
 
@@ -14,43 +13,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool _isFocused = false;
   List<Map<String, dynamic>> posts = [];
-  String _searchQuery = ""; // Add a variable to store the search query
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchPosts(); // Fetch posts from Firestore
-  }
-
-  void _fetchPosts() async {
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance
-              .collection('posts')
-              .orderBy('timestamp', descending: true)
-              .get();
-      setState(() {
-        posts =
-            snapshot.docs
-                .map((doc) => doc.data())
-                .toList();
-      });
-    } catch (e) {
-      debugPrint('Error fetching posts: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    // Filter posts based on the search query
-    final filteredPosts =
-        posts.where((post) {
-          final location = post['location'].toLowerCase();
-          final city = post['city'].toLowerCase();
-          return location.contains(_searchQuery.toLowerCase()) ||
-              city.contains(_searchQuery.toLowerCase());
-        }).toList();
-
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,14 +32,12 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.only(top: 40, right: 20),
                 child: Row(
                   children: [
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 10,),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const TopPlaces(),
-                          ),
+                          MaterialPageRoute(builder: (context) => const TopPlaces()),
                         );
                       },
                       child: Material(
@@ -82,15 +45,12 @@ class _HomeState extends State<Home> {
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                           child: Image.asset(
                             "assets/images/pin.png",
                             height: 30,
                             width: 30,
-                          ),
+                          )
                         ),
                       ),
                     ),
@@ -100,18 +60,13 @@ class _HomeState extends State<Home> {
                       onTap: () async {
                         final result = await Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const AddPost(),
-                          ),
+                          MaterialPageRoute(builder: (context) => const AddPost()),
                         );
-
+                        
                         // Process returned data
                         if (result != null && result is Map<String, dynamic>) {
                           setState(() {
-                            posts.insert(
-                              0,
-                              result,
-                            ); // Add new post at the beginning
+                            posts.insert(0, result); // Add new post at the beginning
                           });
                         }
                       },
@@ -120,19 +75,12 @@ class _HomeState extends State<Home> {
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.blue,
-                            size: 30,
-                          ),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                          child: const Icon(Icons.add, color: Colors.blue, size:30),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 10,),
                     Material(
                       elevation: 3.0,
                       borderRadius: BorderRadius.circular(60),
@@ -198,11 +146,6 @@ class _HomeState extends State<Home> {
                         _isFocused = false;
                       });
                     },
-                    onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value; // Update the search query
-                      });
-                    },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 12,
@@ -223,180 +166,152 @@ class _HomeState extends State<Home> {
             ],
           ),
           const SizedBox(height: 20.00),
-
-          // Display filtered posts
+          
+          // Display posts
           Expanded(
-            child:
-                filteredPosts.isEmpty
-                    ? _buildDefaultPost() // Show default post only if no matches
-                    : ListView.builder(
-                      itemCount: filteredPosts.length,
-                      itemBuilder: (context, index) {
-                        final post = filteredPosts[index];
-                        return Container(
-                          margin: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            bottom: 20,
-                          ),
-                          child: Material(
-                            elevation: 3.2,
+            child: posts.isEmpty
+              ? _buildDefaultPost()
+              : ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
+                    return Container(
+                      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                      child: Material(
+                        elevation: 3.2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10, top: 10),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(30),
+                                      child: Image.asset(
+                                        'assets/images/boy.jpg',
+                                        height: 35,
+                                        width: 35,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 15),
+                                    Text(
+                                      post['name'],
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontFamily: 'Lato',
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              const SizedBox(height: 10),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  File(post['imagePath']),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height / 3.5,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 10,
-                                      top: 10,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            30,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/boy.jpg',
-                                            height: 35,
-                                            width: 35,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 15),
-                                        Text(
-                                          post['name'],
-                                          style: const TextStyle(
-                                            color: Color.fromARGB(255, 0, 0, 0),
-                                            fontFamily: 'Lato',
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(
-                                      File(post['imagePath']),
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                          3.5,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
-                                        child: Icon(
-                                          Icons.location_pin,
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 5.0,
-                                        ),
-                                        child: Text(
-                                          "${post['location']}, ${post['city']}",
-                                          style: const TextStyle(
-                                            color: Color.fromARGB(255, 0, 0, 0),
-                                            fontFamily: 'Lato',
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.location_pin, color: Colors.blue),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 8.0,
-                                      top: 5,
-                                      bottom: 5,
-                                    ),
+                                    padding: const EdgeInsets.only(left: 5.0),
                                     child: Text(
-                                      post['description'] ??
-                                          "Beautiful place to visit!",
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Row(
-                                      children: const [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 10.00),
-                                          child: Icon(
-                                            Icons.favorite_border_outlined,
-                                            color: Color.fromARGB(139, 0, 0, 0),
-                                            size: 30,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 3.0),
-                                          child: Text(
-                                            "Like",
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                139,
-                                                0,
-                                                0,
-                                                0,
-                                              ),
-                                              fontFamily: 'Lato',
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 20.0),
-                                          child: Icon(
-                                            Icons.comment_outlined,
-                                            color: Color.fromARGB(139, 0, 0, 0),
-                                            size: 30,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 8.0),
-                                          child: Text(
-                                            "Comment",
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                139,
-                                                0,
-                                                0,
-                                                0,
-                                              ),
-                                              fontFamily: 'Lato',
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      "${post['location']}, ${post['city']}",
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontFamily: 'Lato',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8.0,
+                                  top: 5,
+                                  bottom: 5,
+                                ),
+                                child: Text(
+                                  post['description'] ?? "Beautiful place to visit!",
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Row(
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10.00),
+                                      child: Icon(
+                                        Icons.favorite_border_outlined,
+                                        color: Color.fromARGB(139, 0, 0, 0),
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 3.0),
+                                      child: Text(
+                                        "Like",
+                                        style: TextStyle(
+                                          color: Color.fromARGB(139, 0, 0, 0),
+                                          fontFamily: 'Lato',
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 20.0),
+                                      child: Icon(
+                                        Icons.comment_outlined,
+                                        color: Color.fromARGB(139, 0, 0, 0),
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        "Comment",
+                                        style: TextStyle(
+                                          color: Color.fromARGB(139, 0, 0, 0),
+                                          fontFamily: 'Lato',
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
           ),
         ],
       ),
     );
   }
-
+  
   Widget _buildDefaultPost() {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10),
@@ -464,7 +379,11 @@ class _HomeState extends State<Home> {
                 ],
               ),
               const Padding(
-                padding: EdgeInsets.only(left: 8.0, top: 5, bottom: 5),
+                padding: EdgeInsets.only(
+                  left: 8.0,
+                  top: 5,
+                  bottom: 5,
+                ),
                 child: Text(
                   "Taj Mahal — chhobi theke o shundor. ",
                   style: TextStyle(fontSize: 15),

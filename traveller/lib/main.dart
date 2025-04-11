@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/main_container.dart';
 import 'pages/signin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Initialize Firebase
 
   bool isLoggedIn = false;
 
@@ -18,6 +16,7 @@ void main() async {
 
     isLoggedIn = username.isNotEmpty && password.isNotEmpty;
   } catch (e) {
+    // Log the error or handle it appropriately
     debugPrint('Error initializing SharedPreferences: $e');
   }
 
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'Traveller',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
       home: isLoggedIn ? const MainContainer() : const SignIn(),
     );
