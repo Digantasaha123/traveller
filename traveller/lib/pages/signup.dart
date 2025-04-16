@@ -17,27 +17,57 @@ class _SignUpState extends State<SignUp> {
   Future<void> registerUser() async {
     if (username.isNotEmpty && password.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('username', username);
-      await prefs.setString('password', password);
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.green,
-        content: Text(
-          "Registered Successfully",
-          style: TextStyle(fontSize: 16.0),
+      // Retrieve existing accounts
+      final accounts = prefs.getStringList('accounts') ?? [];
+
+      // Check if the username already exists
+      final existingAccount = accounts.firstWhere(
+        (account) => account.split(':')[0] == username,
+        orElse: () => '',
+      );
+
+      if (existingAccount.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              "Username already exists",
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ),
+        );
+        return;
+      }
+
+      // Add the new account
+      accounts.add('$username:$password');
+      await prefs.setStringList('accounts', accounts);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            "Registered Successfully",
+            style: TextStyle(fontSize: 16.0),
+          ),
         ),
-      ));
+      );
 
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const SignIn()));
+        context,
+        MaterialPageRoute(builder: (context) => const SignIn()),
+      );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(
-          "Please fill in all fields",
-          style: TextStyle(fontSize: 16.0),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            "Please fill in all fields",
+            style: TextStyle(fontSize: 16.0),
+          ),
         ),
-      ));
+      );
     }
   }
 
@@ -52,9 +82,10 @@ class _SignUpState extends State<SignUp> {
             const Text(
               "Sign Up",
               style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 30.0),
             TextField(
@@ -90,14 +121,17 @@ class _SignUpState extends State<SignUp> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => SignIn()));
+                  context,
+                  MaterialPageRoute(builder: (context) => SignIn()),
+                );
               },
               child: const Text(
                 "Already have an account? Sign In",
                 style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
               ),
             ),
           ],

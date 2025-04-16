@@ -17,20 +17,31 @@ class _SignInState extends State<SignIn> {
 
   Future<void> userLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    final storedUsername = prefs.getString('username') ?? '';
-    final storedPassword = prefs.getString('password') ?? '';
 
-    if (username == storedUsername && password == storedPassword) {
+    // Retrieve existing accounts
+    final accounts = prefs.getStringList('accounts') ?? [];
+
+    // Check if the username and password match any account
+    final matchingAccount = accounts.firstWhere(
+      (account) => account == '$username:$password',
+      orElse: () => '',
+    );
+
+    if (matchingAccount.isNotEmpty) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const MainContainer()));
+        context,
+        MaterialPageRoute(builder: (context) => const MainContainer()),
+      );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(
-          "Invalid username or password",
-          style: TextStyle(fontSize: 16.0),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            "Invalid username or password",
+            style: TextStyle(fontSize: 16.0),
+          ),
         ),
-      ));
+      );
     }
   }
 
@@ -45,9 +56,10 @@ class _SignInState extends State<SignIn> {
             const Text(
               "Sign In",
               style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 30.0),
             TextField(
@@ -83,14 +95,17 @@ class _SignInState extends State<SignIn> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const SignUp()));
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignUp()),
+                );
               },
               child: const Text(
                 "Don't have an account? Sign Up",
                 style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
               ),
             ),
           ],
@@ -99,3 +114,4 @@ class _SignInState extends State<SignIn> {
     );
   }
 }
+

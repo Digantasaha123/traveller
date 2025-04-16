@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'image_description.dart';
 
 class TopPlaces extends StatefulWidget {
   const TopPlaces({super.key});
@@ -20,7 +21,6 @@ class _TopPlacesState extends State<TopPlaces> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Row(
                 children: [
-                  // Add navigation back to Home screen
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -55,7 +55,12 @@ class _TopPlacesState extends State<TopPlaces> {
                   topRight: Radius.circular(30),
                 ),
                 child: Container(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 10),
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: 30,
+                    bottom: 10,
+                  ),
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 255, 255, 255),
                     borderRadius: BorderRadius.only(
@@ -68,224 +73,338 @@ class _TopPlacesState extends State<TopPlaces> {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                             
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(
-                                      "assets/images/bali.jpg",
-                                      height: 200,
-                                      width: 130,
-                                      fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ImageDescription(
+                                      imagePath: "assets/images/bali.jpg",
+                                      title: "Bali",
+                                      description:
+                                          "Bali is a beautiful island in Indonesia known for its beaches, temples, and vibrant culture.",
                                     ),
                                   ),
-                                  Container(
-                                  
-                                    margin: const EdgeInsets.only(top: 168,),
-                                    width: 130,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(28, 0, 0, 0),
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                );
+                              },
+                              child: Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.asset(
+                                        "assets/images/bali.jpg",
+                                        height: 200,
+                                        width: 130,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    child: const Center(
-                                      child: Text("Bali",
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 168),
+                                      width: 130,
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(18, 0, 0, 0),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "Bali",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(
-                                      "assets/images/india.jpg",
-                                      height: 200,
-                                      width: 130,
-                                      fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ImageDescription(
+                                      imagePath: "assets/images/india.jpg",
+                                      title: "India",
+                                      description:
+                                          "India is a diverse country with rich history, culture, and iconic landmarks like the Taj Mahal.",
                                     ),
                                   ),
-                                  Container(
-                                  
-                                    margin: const EdgeInsets.only(top: 168),
-                                    width: 130,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(28, 0, 0, 0),
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                );
+                              },
+                              child: Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.asset(
+                                        "assets/images/india.jpg",
+                                        height: 200,
+                                        width: 130,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    child: const Center(
-                                      child: Text("India",
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 168),
+                                      width: 130,
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(28, 0, 0, 0),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "India",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                            
                           ],
                         ),
                         const SizedBox(height: 20),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                             
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(
-                                      "assets/images/mexico.jpg",
-                                      height: 200,
-                                      width: 130,
-                                      fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ImageDescription(
+                                      imagePath: "assets/images/mexico.jpg",
+                                      title: "Mexico",
+                                      description:
+                                          "Mexico is known for its rich culture, delicious cuisine, and beautiful beaches.",
                                     ),
                                   ),
-                                  Container(
-                                  
-                                    margin: const EdgeInsets.only(top: 168,),
-                                    width: 130,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(28, 0, 0, 0),
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                );
+                              },
+                              child: Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.asset(
+                                        "assets/images/mexico.jpg",
+                                        height: 200,
+                                        width: 130,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    child: const Center(
-                                      child: Text("Mexico",
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 168),
+                                      width: 130,
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(28, 0, 0, 0),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "Mexico",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(
-                                      "assets/images/france.jpg",
-                                      height: 200,
-                                      width: 130,
-                                      fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ImageDescription(
+                                      imagePath: "assets/images/france.jpg",
+                                      title: "France",
+                                      description:
+                                          "France is famous for its art, fashion, and iconic landmarks like the Eiffel Tower.",
                                     ),
                                   ),
-                                  Container(
-                                  
-                                    margin: const EdgeInsets.only(top: 168),
-                                    width: 130,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(28, 0, 0, 0),
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                );
+                              },
+                              child: Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.asset(
+                                        "assets/images/france.jpg",
+                                        height: 200,
+                                        width: 130,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    child: const Center(
-                                      child: Text("France",
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 168),
+                                      width: 130,
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(28, 0, 0, 0),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "France",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                            
                           ],
                         ),
-                        const SizedBox(height: 20,),
+                        const SizedBox(height: 20),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                             
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(
-                                      "assets/images/newyork.jpg",
-                                      height: 200,
-                                      width: 130,
-                                      fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ImageDescription(
+                                      imagePath: "assets/images/newyork.jpg",
+                                      title: "New York",
+                                      description:
+                                          "New York is a bustling city known for its skyscrapers, Broadway shows, and cultural diversity.",
                                     ),
                                   ),
-                                  Container(
-                                  
-                                    margin: const EdgeInsets.only(top: 168,),
-                                    width: 130,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(28, 0, 0, 0),
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                );
+                              },
+                              child: Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.asset(
+                                        "assets/images/newyork.jpg",
+                                        height: 200,
+                                        width: 130,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    child: const Center(
-                                      child: Text("New York",
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 168),
+                                      width: 130,
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(28, 0, 0, 0),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "New York",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Image.asset(
-                                      "assets/images/dubai.jpg",
-                                      height: 200,
-                                      width: 130,
-                                      fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ImageDescription(
+                                      imagePath: "assets/images/dubai.jpg",
+                                      title: "Dubai",
+                                      description:
+                                          "Dubai is known for its modern architecture, luxury shopping, and vibrant nightlife.",
                                     ),
                                   ),
-                                  Container(
-                                  
-                                    margin: const EdgeInsets.only(top: 168),
-                                    width: 130,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(28, 0, 0, 0),
-                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                );
+                              },
+                              child: Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.asset(
+                                        "assets/images/dubai.jpg",
+                                        height: 200,
+                                        width: 130,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    child: const Center(
-                                      child: Text("Dubai",
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 168),
+                                      width: 130,
+                                      decoration: const BoxDecoration(
+                                        color: Color.fromARGB(28, 0, 0, 0),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(20),
+                                          bottomRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "Dubai",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                            
                           ],
                         ),
                       ],

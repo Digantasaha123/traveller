@@ -72,7 +72,7 @@ class _AddPostState extends State<AddPost> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
                 'Create a New Post',
@@ -160,7 +160,7 @@ class _AddPostState extends State<AddPost> {
               // Description Field
               TextField(
                 controller: _descriptionController,
-                maxLines: 3,
+                maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(),

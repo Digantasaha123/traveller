@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'pages/main_container.dart';
 import 'pages/signin.dart';
+import 'pages/profile.dart';
+import 'pages/logout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   bool isLoggedIn = false;
 
   try {
@@ -37,6 +39,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
       home: isLoggedIn ? const MainContainer() : const SignIn(),
+      routes: {
+        '/profile': (context) => const Profile(), // Add route for profile page
+        '/logout': (context) => const Logout(), // Add route for logout page
+        '/signin': (context) => const SignIn(), // Add route for sign-in page
+      },
     );
   }
 }
+
+

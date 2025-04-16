@@ -10,24 +10,17 @@ class MainContainer extends StatefulWidget {
 }
 
 class _MainContainerState extends State<MainContainer> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
   
   final List<Widget> _pages = [
     const Home(),
     const TopPlaces(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      
     );
   }
 }
